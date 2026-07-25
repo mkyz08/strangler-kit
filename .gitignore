@@ -1,0 +1,23 @@
+# 現新橋（strangler-kit）はツールキット本体（.claude/, docs/templates/, README, CLAUDE.mdの雛形）のみを
+# 管理対象とする。移行対象プロジェクトの成果物（計画書・設計書・進捗管理表・現行/新システムのソース）は
+# プロジェクトごとに別リポジトリで管理するため、ここでは対象外にする。
+
+# このツールキットを検証したプロジェクトインスタンスの成果物（設計書・計画書）
+/CLAUDE.md
+/docs/00_migration_plan.md
+/docs/01_legacy_architecture_overview.md
+/docs/02_foundation_design.md
+/docs/screens_inventory.md
+/docs/screens/
+
+# レガシーソース・新システムのソース・インフラ定義
+/legacy/
+/backend/
+/frontend/
+/docker-compose.yml
+
+# ローカル設定
+/.claude/settings.local.json
+
+# OS/エディタ
+.DS_Store
