@@ -23,8 +23,38 @@
 | バックエンド | （現状分析で確定・記入） | Spring Boot（REST API） |
 | DB | （現状分析で確定・記入） | PostgreSQL |
 
-ビルドツール・バージョン・テストフレームワーク等の細目は、`scaffold-foundation`実行時に
-`docs/02_foundation_design.md`で確定し、本セクションにも要約を追記してください。
+`scaffold-foundation`実行時、`docs/02_foundation_design.md`（`docs/templates/foundation_design_template.md`
+に既定値を記載済み）で以下を確定してください。プロジェクト固有の事情（ビルド環境にGradleしか無い等）が
+なければ、この既定値をそのまま採用してよいものとして扱います。
+
+**バックエンド既定値**
+
+| 項目 | 既定値 |
+|---|---|
+| JDK | Java 21（LTS） |
+| ビルドツール | Maven |
+| フレームワーク | Spring Boot 3.x 最新安定版 |
+| DBマイグレーション | Flyway |
+| 認証 | Spring Security + JWT（レスポンスボディでトークン返却、`localStorage`等への永続化はしない） |
+| バリデーション | Bean Validation（`jakarta.validation`） |
+| エラーハンドリング | `@RestControllerAdvice`、統一形式 `{code, message, details}` |
+| テスト | JUnit 5 + Mockito + AssertJ + `spring-boot-starter-test`（`@WebMvcTest`でController層をスライステスト） |
+| ローカルDB | Docker Compose（`postgres:16-alpine`） |
+
+**フロントエンド既定値**
+
+| 項目 | 既定値 |
+|---|---|
+| ビルドツール | Vite |
+| フレームワーク | React 18系（安定重視）。19系採用も妨げない |
+| 状態管理 | Redux Toolkit + RTK Query |
+| ルーティング | React Router v6（data router） |
+| フォーム | 追加ライブラリなし。`useState`による手動バリデーション＋共通`FormErrorAlert`/`FlashMessageBanner`コンポーネント |
+| テスト | Vitest + React Testing Library |
+| E2E | Playwright（導入は任意） |
+| Lint/Format | ESLint + typescript-eslint + Prettier、または`npm create vite`既定のoxlintでも可（どちらでもよい） |
+
+確定した内容は本セクションにも要約を追記してください。
 
 ## 3. ディレクトリ構成
 
@@ -105,11 +135,16 @@ docs/screens/SCR-001_ログイン/
 
 `SCR-ID` は `docs/screens_inventory.md` で採番・管理する。
 
-## 8. コーディング規約（暫定・Phase 1で確定）
+## 8. コーディング規約
 
-- フロントエンド: TypeScript strict mode、Redux Toolkitを使用（`createSlice`/`createAsyncThunk`、可能ならRTK Query検討）。クラスコンポーネントは使わず関数コンポーネント＋Hooksに統一。
-- バックエンド: Spring Bootの標準レイヤードアーキテクチャ（Controller / Service / Repository / Entity・DTO）を踏襲。
-- 命名・Lint/Formatterルール等の詳細はPhase 1確定後に追記する。
+- フロントエンド: TypeScript strict mode、Redux Toolkit + RTK Queryを標準採用（§2参照）。クラスコンポーネントは
+  使わず関数コンポーネント＋Hooksに統一。フォームは新規ライブラリを導入せず`useState`による手動バリデーション
+  ＋共通`FormErrorAlert`/`FlashMessageBanner`（Wave2着手時に確立、詳細は`docs/02_foundation_design.md`）。
+- バックエンド: Spring Bootの標準レイヤードアーキテクチャ（Controller / Service / Repository / Entity・DTO）を
+  機能単位パッケージング（`<basePackage>.<screen機能ドメイン>.*`）で踏襲。共通例外は`@RestControllerAdvice`に
+  集約し、統一エラー形式`{code, message, details}`に従う。
+- 命名・Lint/Formatterルールの詳細、および§2の既定値からの変更点はPhase 1（`kickoff-migration`/
+  `scaffold-foundation`）確定後に追記する。
 
 ## 9. AIエージェントが守るべき禁止事項
 

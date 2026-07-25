@@ -11,12 +11,17 @@ description: Phase 1.5（共通基盤構築）を実行する。認証方式・�
 
 ## 実行手順
 
-1. `docs/00_migration_plan.md` §11、`docs/01_legacy_architecture_overview.md` を確認する。認証方式・DB種別・
-   ビルドツールなど、共通基盤設計に必須の未確定事項が残っている場合は、先にユーザーに確認する
-   （このSKILL内で仮決めしない）。
+1. `docs/00_migration_plan.md` §11、`docs/01_legacy_architecture_overview.md` を確認する。
+   `docs/templates/foundation_design_template.md` には各項目の既定値（Maven、Java 21、Spring Boot
+   3.x、Flyway、Vite、React 18系、Redux Toolkit + RTK Query等）が記載済みなので、**プロジェクト固有の
+   制約と矛盾しない限りその既定値をそのまま採用してよい**（逐一ユーザーに確認する必要はない）。
+   一方で、DB種別（PostgreSQLへの移行要否）や実行環境の制約（例: Gradleしか使えない、社内標準の
+   ライブラリがある等）のように、既定値では判断できない・既定値と衝突する未確定事項が残っている場合は、
+   先にユーザーに確認する（このSKILL内で仮決めしない）。
 
 2. `docs/templates/foundation_design_template.md` をもとに `docs/02_foundation_design.md` を作成する。
-   決定事項だけでなく、その理由（既存のシステム制約、規模感から見た妥当性等）も簡潔に添える。
+   既定値をそのまま採用した項目・変更した項目の両方について、理由（既定値を踏襲した／プロジェクト固有の
+   制約でこう変更した、等）を簡潔に添える。
 
 3. **共通基盤設計レビュー（人間承認ゲート）**: 内容をユーザーに提示し、承認を得るまで次に進まない。
    以降のすべての画面設計・実装がここでの決定に従うため、他の承認ゲート以上に慎重に確認を求める。
