@@ -22,6 +22,12 @@ description: legacy/にレガシーソース一式が配置された後、Phase 
    - 共通部品（共通レイアウト、共通バリデーション、共通例外処理）
    - 使用しているCSSフレームワーク・UIライブラリ（Bootstrap等）の有無（`scaffold-foundation`で
      「現行踏襲」を選択肢として提示するために必要）
+   - **複数の切り替え可能な実装（DB接続方式がプロファイル切替式、Repository実装が複数並存等）がある場合、
+     どれが実際に有効なデフォルトか**（設定ファイル・初期化コードのハードコード値等から特定できる範囲で）。
+     この種のアプリ全体に共通する事実は、個々の画面の`legacy-analyzer`が毎回別々に再調査すると
+     同じ調査が画面数分重複するため、ここで一度特定して`01_legacy_architecture_overview.md`に
+     記録しておく（実例: PetClinic検証でJDBC/JPA/Spring Data JPAの3実装のうちJPAが既定である事実を
+     複数画面のlegacy-analyzerが独立に再調査していたことが判明し、この手順を追加した）
 
 3. 画面を一つずつ洗い出し、`docs/screens_inventory.md` に以下を記入する。
    - SCR-ID（3桁連番で新規採番）
