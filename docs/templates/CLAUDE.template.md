@@ -24,8 +24,10 @@
 | DB | （現状分析で確定・記入） | PostgreSQL |
 
 `scaffold-foundation`実行時、`docs/02_foundation_design.md`（`docs/templates/foundation_design_template.md`
-に既定値を記載済み）で以下を確定してください。プロジェクト固有の事情（ビルド環境にGradleしか無い等）が
-なければ、この既定値をそのまま採用してよいものとして扱います。
+に既定値を記載済み）で以下を確定してください。**既定値は無断で採用せず、着手前にユーザーへ選択肢として
+一括提示し、確認を得てから確定します**（例:「ビルドツールはMavenを既定値としていますが、Gradleへの
+変更も可能です」のように、既定値と代替案を並べて示す。1項目ずつ逐一質問するのではなく、主要な選定を
+まとめて1回で確認する）。
 
 **バックエンド既定値**
 
@@ -49,7 +51,7 @@
 | フレームワーク | React 18系（安定重視）。19系採用も妨げない |
 | 状態管理 | Redux Toolkit + RTK Query |
 | ルーティング | React Router v6（data router） |
-| CSSフレームワーク | Tailwind CSS。ユーティリティクラスでスタイリングし、独自のコンポーネントライブラリ（antd/MUI等）は導入しない |
+| CSSフレームワーク | Tailwind CSS（代替案: 現行システムが使用しているCSSフレームワークをReact向けの形で踏襲することも可） |
 | フォーム | 追加ライブラリなし。`useState`による手動バリデーション＋共通`FormErrorAlert`/`FlashMessageBanner`コンポーネント |
 | テスト | Vitest + React Testing Library |
 | E2E | **Playwright を標準採用する（任意ではない）** |
