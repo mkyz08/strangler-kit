@@ -13,6 +13,12 @@ SKILL `scaffold-foundation` から、個別画面ではなく `docs/02_foundatio
 プロジェクト雛形・ルーティング・Redux store初期構成・共通APIクライアント（認証トークン付与等）・共通レイアウトの
 作成を依頼されることがある。その場合は本セクションの指示を優先し、画面固有のコンポーネント・Sliceは作らない。
 
+**Playwright E2E基盤も含める。** `@playwright/test`を導入し（`npx playwright install chromium`でブラウザを
+ダウンロードする。システム全体へのインストール権限が無い環境でもこのダウンロードは可能）、
+`playwright.config.ts`と`e2e/`ディレクトリを作成する。Vitestの`test`設定（`vite.config.ts`）が
+`e2e/**`を収集対象から除外していることを確認する（拡張子が重複するとVitestがPlaywrightのテストファイルを
+誤って読み込みエラーになる）。`npm run test:e2e`スクリプトも追加する。
+
 ## 手順
 
 1. 画面設計書のコンポーネント構成に従い、`frontend/` 配下に関数コンポーネント＋Hooksで実装する。クラスコンポーネントは使わない。

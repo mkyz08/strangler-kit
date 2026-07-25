@@ -46,11 +46,19 @@ Wave 1（画面移行）着手前に一度だけ確定させる、全画面共�
   401時の自動ログアウトを共通化）:
 - 共通レイアウト・共通コンポーネント（既定値: `AppLayout`（ヘッダー・ナビゲーション、ロール別出し分け）、
   `RequireAuth`、`RequireRole`）:
+- CSSフレームワーク・スタイリング方針（既定値: Tailwind CSS。ユーティリティクラスでスタイリングし、
+  antd/MUI等の独自コンポーネントライブラリは導入しない。既存の手組みDialog/Table/フォーム実装方針と
+  親和性が高いため）:
 - フォーム実装方針（既定値: 追加ライブラリ（react-hook-form等）は導入しない。`useState`による制御
   コンポーネント＋送信時の手動バリデーション。エラーは共通`FormErrorAlert`コンポーネントでまとめて表示
   （フィールド単位のインライン表示は行わない）。登録・更新成功時の通知は`useFlashMessage`フック＋
   `FlashMessageBanner`で統一する）:
-- テスト基盤（既定値: Vitest + React Testing Library。E2Eは任意でPlaywright）:
+- テスト基盤（既定値: Vitest + React Testing Library）:
+- E2Eテスト（既定値: **Playwrightを標準採用する（任意にしない）**。curl/モックテストはブラウザの
+  CORS制約を受けないため、CORS設定漏れ等ブラウザでしか顕在化しない不具合を検出できない。
+  本基盤構築時に`frontend/playwright.config.ts`・`frontend/e2e/`を用意し、Chromium
+  （`npx playwright install chromium`。システム全体へのインストール権限が無い環境でもダウンロード可能）
+  で認証フローの疎通を確認してから画面移行に進む）:
 - Lint/Format（既定値: ESLint + typescript-eslint + Prettier、または`npm create vite`既定の
   oxlintでも可。どちらでもよい）:
 

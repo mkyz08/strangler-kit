@@ -49,9 +49,15 @@
 | フレームワーク | React 18系（安定重視）。19系採用も妨げない |
 | 状態管理 | Redux Toolkit + RTK Query |
 | ルーティング | React Router v6（data router） |
+| CSSフレームワーク | Tailwind CSS。ユーティリティクラスでスタイリングし、独自のコンポーネントライブラリ（antd/MUI等）は導入しない |
 | フォーム | 追加ライブラリなし。`useState`による手動バリデーション＋共通`FormErrorAlert`/`FlashMessageBanner`コンポーネント |
 | テスト | Vitest + React Testing Library |
-| E2E | Playwright（導入は任意） |
+| E2E | **Playwright を標準採用する（任意ではない）**。curlでの結合確認やVitestのモックテストは
+  ブラウザのCORS制約を受けないため、CORS設定漏れのようなブラウザでしか顕在化しない不具合を
+  すり抜ける（検証中に実例あり: `SecurityConfig`にCORS設定が丸ごと欠落していたが、単体テスト
+  61件・結合テストのcurl確認をすべて通過した後、実際にブラウザからログインして初めて発覚した）。
+  `scaffold-foundation`で`frontend/playwright.config.ts`・`frontend/e2e/`を用意し、各画面の
+  `test-engineer`が最低限ハッピーパスのE2Eテストを追加する |
 | Lint/Format | ESLint + typescript-eslint + Prettier、または`npm create vite`既定のoxlintでも可（どちらでもよい） |
 
 確定した内容は本セクションにも要約を追記してください。
@@ -138,13 +144,18 @@ docs/screens/SCR-001_ログイン/
 ## 8. コーディング規約
 
 - フロントエンド: TypeScript strict mode、Redux Toolkit + RTK Queryを標準採用（§2参照）。クラスコンポーネントは
-  使わず関数コンポーネント＋Hooksに統一。フォームは新規ライブラリを導入せず`useState`による手動バリデーション
-  ＋共通`FormErrorAlert`/`FlashMessageBanner`（Wave2着手時に確立、詳細は`docs/02_foundation_design.md`）。
+  使わず関数コンポーネント＋Hooksに統一。スタイリングはTailwind CSSのユーティリティクラスに統一し、
+  antd/MUI等のコンポーネントライブラリは導入しない。フォームは新規ライブラリを導入せず`useState`による
+  手動バリデーション＋共通`FormErrorAlert`/`FlashMessageBanner`（Wave2着手時に確立、詳細は`docs/02_foundation_design.md`）。
 - バックエンド: Spring Bootの標準レイヤードアーキテクチャ（Controller / Service / Repository / Entity・DTO）を
   機能単位パッケージング（`<basePackage>.<screen機能ドメイン>.*`）で踏襲。共通例外は`@RestControllerAdvice`に
   集約し、統一エラー形式`{code, message, details}`に従う。
 - 命名・Lint/Formatterルールの詳細、および§2の既定値からの変更点はPhase 1（`kickoff-migration`/
   `scaffold-foundation`）確定後に追記する。
+- **テスト層の使い分け**: 単体テスト（Vitest/JUnit）とcurlでの結合確認は「ロジックが正しいか」を検証する。
+  「実際のブラウザから疎通できるか」（CORS、Cookie、実際のフォーム操作等）はPlaywright E2Eでしか
+  検証できないため、両方を実施して初めて検証完了とする。E2Eを省略した場合、`05_test_spec.md`に
+  省略理由を明記すること（「環境上ブラウザが使えない」等の具体的な理由が必要。「面倒だから」は不可）。
 
 ## 9. AIエージェントが守るべき禁止事項
 
