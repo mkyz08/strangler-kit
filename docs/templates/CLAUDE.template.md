@@ -52,13 +52,15 @@
 | CSSフレームワーク | Tailwind CSS。ユーティリティクラスでスタイリングし、独自のコンポーネントライブラリ（antd/MUI等）は導入しない |
 | フォーム | 追加ライブラリなし。`useState`による手動バリデーション＋共通`FormErrorAlert`/`FlashMessageBanner`コンポーネント |
 | テスト | Vitest + React Testing Library |
-| E2E | **Playwright を標準採用する（任意ではない）**。curlでの結合確認やVitestのモックテストは
-  ブラウザのCORS制約を受けないため、CORS設定漏れのようなブラウザでしか顕在化しない不具合を
-  すり抜ける（検証中に実例あり: `SecurityConfig`にCORS設定が丸ごと欠落していたが、単体テスト
-  61件・結合テストのcurl確認をすべて通過した後、実際にブラウザからログインして初めて発覚した）。
-  `scaffold-foundation`で`frontend/playwright.config.ts`・`frontend/e2e/`を用意し、各画面の
-  `test-engineer`が最低限ハッピーパスのE2Eテストを追加する |
+| E2E | **Playwright を標準採用する（任意ではない）** |
 | Lint/Format | ESLint + typescript-eslint + Prettier、または`npm create vite`既定のoxlintでも可（どちらでもよい） |
+
+**E2Eを標準採用する理由**: curlでの結合確認やVitestのモックテストはブラウザのCORS制約を受けないため、
+CORS設定漏れのようなブラウザでしか顕在化しない不具合をすり抜ける（検証中に実例あり:
+`SecurityConfig`にCORS設定が丸ごと欠落していたが、単体テスト61件・結合テストのcurl確認をすべて
+通過した後、実際にブラウザからログインして初めて発覚した）。`scaffold-foundation`で
+`frontend/playwright.config.ts`・`frontend/e2e/`を用意し、各画面の`test-engineer`が最低限
+ハッピーパスのE2Eテストを追加する。
 
 確定した内容は本セクションにも要約を追記してください。
 

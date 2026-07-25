@@ -17,20 +17,30 @@
   修正対象として明示的に除外します。
 - **不明点は推測しない**: レガシーコードから意図が読み取れない場合、AIは仕様を勝手に決めず「未確定事項」として
   記録し、人間に確認を求めます。
+- **実機ブラウザでの検証を標準採用**: 単体テスト・curlでの結合確認だけでは、CORS設定漏れのようなブラウザの
+  同一オリジンポリシーに起因する不具合を検出できません（検証中に実例あり）。Playwright E2Eテストを
+  「任意」ではなく標準の検証手段として組み込んでいます。
 
 ## 構成
 
 ```
 .
-├── CLAUDE.template.md     ← 新しいプロジェクトの CLAUDE.md の雛形（docs/templates/ 配下）
+├── README.md
 ├── docs/
-│   └── templates/         ← 現状分析書・画面設計書・API設計書・DB設計書・テスト仕様書・
-│                              移行チェックリストのテンプレート一式
+│   └── templates/          ← 設計書テンプレート一式（本ツールの中核）
+│       ├── CLAUDE.template.md              新しいプロジェクトの CLAUDE.md の雛形
+│       ├── foundation_design_template.md   共通基盤設計書テンプレート
+│       ├── legacy_analysis_template.md     現状分析レポートテンプレート
+│       ├── screen_design_template.md       画面設計書テンプレート
+│       ├── api_design_template.md          API設計書テンプレート
+│       ├── db_design_template.md           DB設計書（差分）テンプレート
+│       ├── test_spec_template.md           テスト仕様書テンプレート
+│       └── migration_checklist_template.md 移行完了チェックリストテンプレート
 └── .claude/
-    ├── agents/            ← 移行用サブエージェント（legacy-analyzer, screen-designer, api-designer,
-    │                          backend-coder, frontend-coder, test-engineer, migration-reviewer）
-    └── skills/            ← 移行ワークフロー（kickoff-migration, scaffold-foundation, migrate-screen,
-                               verify-migration）
+    ├── agents/             ← 移行用サブエージェント（legacy-analyzer, screen-designer, api-designer,
+    │                           backend-coder, frontend-coder, test-engineer, migration-reviewer）
+    └── skills/             ← 移行ワークフロー（kickoff-migration, scaffold-foundation, migrate-screen,
+                                verify-migration）
 ```
 
 エージェント・SKILLの役割の詳細は `docs/templates/CLAUDE.template.md` を参照してください。

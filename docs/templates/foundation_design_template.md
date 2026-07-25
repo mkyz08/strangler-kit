@@ -31,6 +31,9 @@ Wave 1（画面移行）着手前に一度だけ確定させる、全画面共�
   レスポンス形式 `{ "code": "string", "message": "string", "details": [] }`）:
 - DBマイグレーションツール（既定値: Flyway。シンプルな増分マイグレーションに向き学習コストが低いため）:
 - 共通バリデーション方針（既定値: Bean Validation（`jakarta.validation`）をDTOに付与）:
+- CORS設定（既定値: フロントエンドの開発用オリジン（例: `http://localhost:5173`）を`CorsConfigurationSource`で
+  明示的に許可する。**設定を省略すると、単体テスト・curlはすべて通過するのに実際のブラウザからは接続できない
+  という不具合になる**（過去に実例あり。curlはブラウザの同一オリジンポリシーを経由しないため検出できない）:
 - テスト基盤（既定値: JUnit 5 + Mockito + AssertJ + `spring-boot-starter-test`。Controller層は
   `@WebMvcTest`によるスライステストを基本とする）:
 

@@ -22,6 +22,9 @@ SKILL `scaffold-foundation` から、個別画面ではなく `docs/02_foundatio
 ## 手順
 
 1. 画面設計書のコンポーネント構成に従い、`frontend/` 配下に関数コンポーネント＋Hooksで実装する。クラスコンポーネントは使わない。
+   スタイリングは`docs/02_foundation_design.md`のCSSフレームワーク方針（既定値: Tailwind CSSのユーティリティ
+   クラス）に従う。独自のCSSファイル・class名を新設せず、既存の他画面実装（`frontend/src/features/department/`等）で
+   使われているユーティリティクラスの組み合わせ（配色・余白・角丸等）を踏襲する。
 2. 画面設計書のRedux設計（Slice、Actions/Reducers、非同期処理、Selector）を `createSlice`/`createAsyncThunk`
    （またはRTK Query、設計書で明示されている場合）で実装する。
 3. API設計書のエンドポイント・リクエスト/レスポンス形式に厳密に合わせてAPIクライアント処理を実装する。型定義
