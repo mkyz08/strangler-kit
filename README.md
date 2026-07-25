@@ -22,7 +22,7 @@
 
 ```
 .
-├── CLAUDE.md.template     ← 新しいプロジェクトの CLAUDE.md の雛形（docs/templates/ 配下）
+├── CLAUDE.template.md     ← 新しいプロジェクトの CLAUDE.md の雛形（docs/templates/ 配下）
 ├── docs/
 │   └── templates/         ← 現状分析書・画面設計書・API設計書・DB設計書・テスト仕様書・
 │                              移行チェックリストのテンプレート一式
@@ -33,12 +33,12 @@
                                verify-migration）
 ```
 
-エージェント・SKILLの役割の詳細は `docs/templates/CLAUDE.md.template` を参照してください。
+エージェント・SKILLの役割の詳細は `docs/templates/CLAUDE.template.md` を参照してください。
 
 ## 使い方
 
 1. このリポジトリの内容（`.claude/`, `docs/templates/`）を移行対象プロジェクトのルートにコピーする。
-2. `docs/templates/CLAUDE.md.template` をプロジェクトルートに `CLAUDE.md` としてコピーし、
+2. `docs/templates/CLAUDE.template.md` をプロジェクトルートに `CLAUDE.md` としてコピーし、
    プロジェクト概要・技術スタックを埋める。
 3. 移行対象のレガシーソース一式を `legacy/` に配置する。
 4. Claude Codeで `/kickoff-migration` を実行し、画面棚卸し・現行アーキテクチャ概要を作成する（Phase 1）。
