@@ -19,6 +19,25 @@ SKILL `scaffold-foundation` から、個別画面ではなく `docs/02_foundatio
 （設定を丸ごと忘れると、単体テスト・curlはすべて通過するのに実際のブラウザからは接続できないという
 不具合になる。過去に実例あり）。
 
+**アプリケーション全体のコンテキストロードテストを1件追加する。** `@SpringBootTest`で
+`ApplicationContext`が実際に起動できることだけを確認する最小限のテスト（`contextLoads()`のみで中身は空でよい）
+を`src/test/java/<basePackage>/ApplicationContextLoadTest.java`に追加する。DBはH2インメモリ
+（`com.h2database:h2`をtestスコープで追加、`src/test/resources/application.yml`で
+`spring.datasource.url: jdbc:h2:mem:...;MODE=PostgreSQL`・`spring.jpa.hibernate.ddl-auto: create-drop`・
+`spring.flyway.enabled: false`を設定）を使い、Docker Compose不要で実行できるようにする。**理由**:
+各画面の`@WebMvcTest`スライステストはBeanをモック化するため、複数画面が並行して別パッケージに
+同名クラス（例: 複数パッケージにそれぞれ`PetRepository`を作った場合の`BeanDefinitionOverrideException`）を
+作ってしまうSpring Bean名衝突や、DI配線ミスを一切検出できない。この種の不具合は実際に
+`mvn spring-boot:run`でアプリを起動して初めて発覚する（Wave2実装で実例あり、`mvn test`は全件成功していた）。
+
+**サービス層で`@Transactional`が必要なケースを見落とさない。** エンティティを取得→フィールドを変更→
+`repository.save(...)`→保存後のインスタンスから遅延ロード（`@OneToMany`/`@ManyToOne`等）のフィールド・
+コレクションを読んでレスポンスDTOを構築する、という一連の処理をメソッド内で行う場合、`@Transactional`を
+付与しないと`save()`が返す永続化後のインスタンスの遅延ロード対象が未初期化のプロキシのままとなり、
+`LazyInitializationException`で500エラーになる（新規作成専用の処理や、単純な取得のみでレスポンスを組み立てる
+処理では通常発生しない。**更新系**の処理で典型的に発生する。Wave2実装で実例あり、`@WebMvcTest`ではモックの
+ため検出されず、実機起動・実際のHTTPリクエストで初めて発覚した）。
+
 ## 手順
 
 1. API設計書のエンドポイント定義に忠実に、Controller / Service / Repository / Entity / DTO を
@@ -35,6 +54,15 @@ SKILL `scaffold-foundation` から、個別画面ではなく `docs/02_foundatio
 6. 画面設計書の指示で、**既にリリース済みの他画面のファイルを変更する必要がある場合**、コードの変更だけでなく、
    その他画面自身の`03_api_design.md`/`04_db_design.md`（該当箇所）も実装の実態に合わせて更新する
    （放置しない。CLAUDE.md原則7「ドキュメントの一貫性維持」）。
+7. 複数画面をバッチ処理する際、他画面が並行して別パッケージを新設している場合（オーケストレーターの指示で
+   ファイル競合回避のためドメインごとに独立実装する場合等）、**Spring管理下のクラス（`@Repository`/`@Service`/
+   `@Component`等）の単純クラス名がアプリ全体で一意になるよう注意する。** Spring BeanのデフォルトのBean名は
+   完全修飾名ではなく単純クラス名から生成されるため、異なるパッケージに同名クラス（例:
+   `com.example.petclinic.pet.repository.PetRepository`と`com.example.petclinic.visit.repository.PetRepository`）
+   が存在すると、アプリ起動時に`BeanDefinitionOverrideException`で失敗する（各パッケージの単体テストでは
+   検出されない。上記「アプリケーション全体のコンテキストロードテスト」があれば検出できる）。並行実装で
+   他パッケージの命名を事前に把握できない場合は、パッケージ名を反映した一意な名前（例: `VisitPetRepository`）を
+   選ぶことでリスクを避けられる。
 
 ## 制約
 
