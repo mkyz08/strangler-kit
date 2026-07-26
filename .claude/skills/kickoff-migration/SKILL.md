@@ -14,8 +14,12 @@ description: legacy/にレガシーソース一式が配置された後、Phase 
 
 2. `legacy/` 配下を俯瞰し、以下を把握する（Explore的な広い探索。深い業務ロジック解析は個別画面移行時に
    `legacy-analyzer` が行うため、ここではアーキテクチャ・構成の把握に留める）。
-   - ディレクトリ構成、レイヤー構成（Controller/Service/Repository等の配置ルール）
-   - 画面（Controller/JSP or Thymeleafテンプレート単位）の一覧
+   - **対象システムの言語・フレームワーク**（例: Java Spring MVC + JSP、PHPの独自MVC/Laravel/Symfony等）。
+     これは`01_legacy_architecture_overview.md`の冒頭に明記し、以降の全画面の`legacy-analyzer`が
+     レイヤー呼称（Controller/Service/Model等、フレームワークにより異なる）を統一して使う起点にする。
+   - ディレクトリ構成、レイヤー構成（Controller/Service/Repository等の配置ルール。フレームワークにより
+     「Service」層が無く業務ロジックがModel/Controllerに直接書かれる場合もある）
+   - 画面（Controller・ルーティング定義とView/テンプレートの単位）の一覧
    - 認証・認可の実装方式（セッション管理、ログイン処理、権限チェックの仕組み）
    - DB接続方式・使用DB製品・主要テーブル
    - バッチ処理・帳票出力・外部連携など、画面を伴わない機能の有無
@@ -27,7 +31,9 @@ description: legacy/にレガシーソース一式が配置された後、Phase 
      この種のアプリ全体に共通する事実は、個々の画面の`legacy-analyzer`が毎回別々に再調査すると
      同じ調査が画面数分重複するため、ここで一度特定して`01_legacy_architecture_overview.md`に
      記録しておく（実例: PetClinic検証でJDBC/JPA/Spring Data JPAの3実装のうちJPAが既定である事実を
-     複数画面のlegacy-analyzerが独立に再調査していたことが判明し、この手順を追加した）
+     複数画面のlegacy-analyzerが独立に再調査していたことが判明し、この手順を追加した。これはJava/Spring
+     案件の場合の例であり、他言語では別の形の複数実装切り替え（例: 設定ファイルによるDBドライバ切替）が
+     ありうる）
 
 3. 画面を一つずつ洗い出し、`docs/screens_inventory.md` に以下を記入する。
    - SCR-ID（3桁連番で新規採番）
@@ -43,7 +49,8 @@ description: legacy/にレガシーソース一式が配置された後、Phase 
    備考として残し、最終的な粒度をユーザーに確認する。
 
 4. 把握した現行アーキテクチャ概要を `docs/01_legacy_architecture_overview.md` として新規作成する
-   （構成、認証方式、DB、バッチ/帳票の有無、共通部品、使用CSSフレームワーク、画面一覧へのポインタを記載）。
+   （**冒頭に対象システムの言語・フレームワークを明記**した上で、構成、認証方式、DB、バッチ/帳票の有無、
+   共通部品、使用CSSフレームワーク、画面一覧へのポインタを記載）。
 
 5. `docs/00_migration_plan.md` §11「未確定事項」のうち、今回の調査で判明したものにチェックを入れ、
    判明した内容を追記する（DB種別、認証方式など）。判明しなかったものは残し、ユーザーへの確認事項として

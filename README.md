@@ -64,5 +64,7 @@
 
 ## 想定対象システム
 
-中規模のレガシーWebシステム（目安: 数千〜数万行、画面数10〜20程度）。JSP/Servlet、Spring MVC + Thymeleaf
-等のサーバーサイドレンダリング構成での動作を確認しています。
+中規模のレガシーWebシステム（目安: 数千〜数万行、画面数10〜20程度）。特定の言語・フレームワークには
+依存しません。サーバーサイドレンダリング型のWebシステムであれば、Controller/View/Service（または
+Model）といった層構造を`legacy-analyzer`が読み解いて移行します。これまでJSP/Servlet、
+Spring MVC + Thymeleaf構成（Java）での動作を確認しており、PHP等の他言語での検証も進めています。
