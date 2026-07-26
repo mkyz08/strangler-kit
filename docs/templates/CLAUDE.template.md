@@ -75,6 +75,7 @@ CORS設定漏れのようなブラウザでしか顕在化しない不具合を�
 │   ├── 00_migration_plan.md     ← 全体計画書（プロジェクト開始時に作成）
 │   ├── 01_legacy_architecture_overview.md  ← 現行アーキテクチャ概要（kickoff-migrationが作成）
 │   ├── 02_foundation_design.md  ← 共通基盤設計書（scaffold-foundationが作成、Wave1着手前に必須）
+│   ├── 03_handover.md           ← 引き継ぎドキュメント（handover-migrationが作成、全画面完了後に1回）
 │   ├── screens_inventory.md     ← 画面一覧・進捗管理表
 │   ├── templates/               ← 設計書テンプレート一式（本ツールの一部）
 │   └── screens/                 ← 画面ごとの設計書実体（<SCR-ID>_<画面名>/ 配下）
@@ -102,6 +103,10 @@ CORS設定漏れのようなブラウザでしか顕在化しない不具合を�
    サンプルコードのフィールド名が確定仕様と食い違う、既にリリース済みの他画面に手を入れたが設計書側の
    更新が漏れている等）、気づいたエージェントが上流ドキュメントの該当箇所（見出しを含む）を修正する。
    全文修正が難しい場合は、その場に訂正の注記を残す。「後で誰かが直すだろう」で放置しない。
+   なお `docs/03_handover.md`（`handover-migration`が作成する引き継ぎドキュメント）は各種設計書・
+   チェックリストの要約であり正本ではない。参照元（`docs/02_foundation_design.md`、`06_checklist.md`等）
+   が更新された場合、全文を再生成するのではなく該当箇所（特に§4主要設計判断、§6既知の制約）のみを
+   差分更新する。
 
 ## 5. サブエージェント一覧（`.claude/agents/`）
 
@@ -117,6 +122,10 @@ CORS設定漏れのようなブラウザでしか顕在化しない不具合を�
 
 エージェントは `docs/screens/<SCR-ID>_<画面名>/` に成果物を作成・更新することを前提に動く。
 
+`kickoff-migration`・`scaffold-foundation`・`handover-migration`は、個別画面ではなくプロジェクト全体を
+横断する1回限りのタスクのため、専用のサブエージェントを介さずオーケストレーター（メインエージェント）が
+直接調査・作成する。
+
 ## 6. SKILL一覧（`.claude/skills/`）
 
 | SKILL | 用途 | 実行タイミング |
@@ -125,9 +134,12 @@ CORS設定漏れのようなブラウザでしか顕在化しない不具合を�
 | `scaffold-foundation` | 認証方式・状態管理方針等を共通基盤設計書として確定し、backend/frontendの雛形を作成 | Phase 1.5（`kickoff-migration`完了後、Wave1着手前）に1回 |
 | `migrate-screen` | 1画面分の移行を10ステップサイクルで一気通貫に実行 | 画面ごとにPhase 2で実行（`scaffold-foundation`完了後） |
 | `verify-migration` | 特定画面の現新比較検証を単独で再実行 | 実装修正後の再検証、リリース判定前の最終確認など |
+| `handover-migration` | 開発・保守担当者向けの引き継ぎドキュメント（`docs/03_handover.md`）を作成 | 全Wave（全画面）のリリース判定承認後に1回 |
 
 `migrate-screen` は `docs/02_foundation_design.md` が存在しない場合、`scaffold-foundation` が未実施と判断して
 先にそちらの実行を確認する（認証方式・状態管理方針を画面ごとに個別判断させないため）。
+`handover-migration`は`docs/screens_inventory.md`の全画面ステータスが「完了」であることを前提とする。
+未完了画面があれば実行前にユーザーへ確認する。
 
 ## 7. 設計書格納規約
 

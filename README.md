@@ -35,12 +35,13 @@
 │       ├── api_design_template.md          API設計書テンプレート
 │       ├── db_design_template.md           DB設計書（差分）テンプレート
 │       ├── test_spec_template.md           テスト仕様書テンプレート
-│       └── migration_checklist_template.md 移行完了チェックリストテンプレート
+│       ├── migration_checklist_template.md 移行完了チェックリストテンプレート
+│       └── handover_template.md            引き継ぎドキュメントテンプレート
 └── .claude/
     ├── agents/             ← 移行用サブエージェント（legacy-analyzer, screen-designer, api-designer,
     │                           backend-coder, frontend-coder, test-engineer, migration-reviewer）
     └── skills/             ← 移行ワークフロー（kickoff-migration, scaffold-foundation, migrate-screen,
-                                verify-migration）
+                                verify-migration, handover-migration）
 ```
 
 エージェント・SKILLの役割の詳細は `docs/templates/CLAUDE.template.md` を参照してください。
@@ -54,6 +55,8 @@
 4. Claude Codeで `/kickoff-migration` を実行し、画面棚卸し・現行アーキテクチャ概要を作成する（Phase 1）。
 5. `/scaffold-foundation` を実行し、認証方式・状態管理方針等の共通基盤を確定・実装する（Phase 1.5）。
 6. 画面ごとに `/migrate-screen <SCR-ID>` を実行し、標準10ステップサイクルで移行する（Phase 2）。
+7. 全Wave（全画面）のリリース判定が完了したら、`/handover-migration` を実行し、開発・保守担当者向けの
+   引き継ぎドキュメント（`docs/03_handover.md`）を作成する。
 
 途中で作成される計画書・設計書・進捗管理表（`docs/00_migration_plan.md` 等）や、移行対象プロジェクト自体の
 ソースコード（`legacy/` `backend/` `frontend/`）は、このツールキット自体のリポジトリには含めていません。
